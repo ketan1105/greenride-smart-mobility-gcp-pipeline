@@ -2,7 +2,7 @@
 
 GreenRide is a full-scale data engineering project built to simulate and analyze smart electric vehicle (EV) ride data using Google Cloud Platform (GCP). The goal is to offer cities and mobility startups actionable insights into electric ride patterns, charging behavior, and route efficiency to support green urban transport planning.
 
-> ✅ This project demonstrates my ability to design scalable pipelines using GCP services like Cloud Functions, Pub/Sub, Dataflow, BigQuery, Looker Studio, and Cloud Composer — backed by realistic simulated data for near real-time analytics.
+> ✅ This project demonstrates my ability to design scalable pipelines using GCP services like Cloud Run, Pub/Sub, Dataflow, BigQuery, Looker Studio, and Cloud Composer — backed by realistic simulated data for near real-time analytics.
 
 ---
 
@@ -27,7 +27,7 @@ To simulate and analyze EV ride-sharing data to:
 |------------------|---------|
 | Cloud Storage    | Store raw ride JSON files |
 | Cloud Pub/Sub    | Stream ride data to Dataflow |
-| Cloud Functions  | Trigger simulation and publish events |
+| Cloud Run  | Trigger simulation and publish events |
 | Dataflow (Apache Beam) | Transform and enrich streaming data |
 | BigQuery         | Store and analyze processed data |
 | Looker Studio    | Build real-time interactive dashboards |
@@ -133,7 +133,7 @@ Build dashboard using connected BQ views to present EV trends and zone insights.
 ## 👨‍💻 Skills Demonstrated
 
 - Data Engineering | GCP | Python | Apache Beam
-- Pub/Sub | Dataflow | BigQuery | Looker | Cloud Functions | DAG orchestration
+- Pub/Sub | Dataflow | BigQuery | Looker | Cloud Run | DAG orchestration
 
 ---
 
