@@ -47,7 +47,7 @@ greenride-smart-mobility-gcp-pipeline/
 ├── data_simulation/
 │   └── generate_greenride_data.py
 │
-├── cloud_functions/
+├── cloud_run/
 │   └── push_to_gcs.py
 │
 ├── dataflow_pipeline/
