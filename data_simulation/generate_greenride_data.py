@@ -1,60 +1,45 @@
 import random
-import csv
 import uuid
+import json
 from datetime import datetime, timedelta
+import os
 
-# Configuration
-NUM_RECORDS = 500
-VEHICLE_TYPES = ['E-Bike', 'E-Scooter', 'E-Car']
-CITIES = ['Bangalore', 'Delhi', 'Mumbai', 'Pune', 'Hyderabad']
-FARE_BASE = {'E-Bike': 5, 'E-Scooter': 7, 'E-Car': 10}
+NUM_TRIPS = 500
+NUM_STATIONS = 10
 
-# Generate random trip data
+stations = [
+    {"station_id": f"S{i+1}", "name": f"Station {i+1}", "lat": round(28.5 + random.random(), 6), "lon": round(77 + random.random(), 6)}
+    for i in range(NUM_STATIONS)
+]
+
 def generate_trip_data():
     trip_data = []
-    for _ in range(NUM_RECORDS):
-        trip_id = str(uuid.uuid4())
-        user_id = random.randint(1000, 5000)
-        city = random.choice(CITIES)
-        vehicle_type = random.choice(VEHICLE_TYPES)
-        distance_km = round(random.uniform(0.5, 25.0), 2)
-        duration_min = round(distance_km * random.uniform(1.5, 3.5), 2)
-        co2_saved_kg = round(distance_km * random.uniform(0.1, 0.25), 2)
-        fare_amount = round(distance_km * FARE_BASE[vehicle_type], 2)
-        trip_time = datetime.now() - timedelta(days=random.randint(0, 60), minutes=random.randint(0, 1440))
-
-        trip_data.append([
-            trip_id,
-            user_id,
-            city,
-            vehicle_type,
-            distance_km,
-            duration_min,
-            co2_saved_kg,
-            fare_amount,
-            trip_time.strftime('%Y-%m-%d %H:%M:%S')
-        ])
+    for _ in range(NUM_TRIPS):
+        start_station = random.choice(stations)
+        end_station = random.choice([s for s in stations if s["station_id"] != start_station["station_id"]])
+        
+        start_time = datetime.now() - timedelta(days=random.randint(0, 30), minutes=random.randint(0, 1440))
+        duration = timedelta(minutes=random.randint(5, 60))
+        end_time = start_time + duration
+        
+        trip_data.append({
+            "trip_id": str(uuid.uuid4()),
+            "start_station_id": start_station["station_id"],
+            "end_station_id": end_station["station_id"],
+            "start_time": start_time.isoformat(),
+            "end_time": end_time.isoformat(),
+            "distance_km": round(random.uniform(1.0, 15.0), 2),
+            "fare_amount": round(random.uniform(10.0, 150.0), 2),
+            "user_type": random.choice(["subscriber", "casual"])
+        })
     return trip_data
 
-# Write to CSV
-def write_csv(filename, rows):
-    with open(filename, mode='w', newline='') as f:
-        writer = csv.writer(f)
-        writer.writerow([
-            'trip_id',
-            'user_id',
-            'city',
-            'vehicle_type',
-            'distance_km',
-            'duration_min',
-            'co2_saved_kg',
-            'fare_amount',
-            'trip_time'
-        ])
-        writer.writerows(rows)
+def save_to_json(data, filename):
+    with open(filename, "w") as f:
+        json.dump(data, f, indent=2)
 
-if __name__ == '__main__':
-    data = generate_trip_data()
-    write_csv('greenride_trips.csv', data)
-    print(f"✅ Generated greenride_trips.csv with {NUM_RECORDS} records.")
-
+if __name__ == "__main__":
+    os.makedirs("data_simulation/output", exist_ok=True)
+    save_to_json(stations, "data_simulation/output/stations.json")
+    save_to_json(generate_trip_data(), "data_simulation/output/trips.json")
+    print("✅ Data generated successfully.")
