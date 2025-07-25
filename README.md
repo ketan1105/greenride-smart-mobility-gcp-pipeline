@@ -40,30 +40,35 @@ To simulate and analyze EV ride-sharing data to:
 ```
 greenride-smart-mobility-gcp-pipeline/
 │
-├── data_simulation/
-│ └── ride_data_generator.py # Python script to simulate EV ride and charge data
-│
-├── cloud_function/
-│ └── publisher_function.py # Publishes simulated data to Pub/Sub
-│
-├── dataflow/
-│ ├── main.py # Dataflow pipeline for transformation and loading to BigQuery
-│ └── requirements.txt
-│
-├── composer_dag/
-│ └── greenride_dag.py # Schedules Cloud Function and Dataflow daily
-│
-├── bq_schema/
-│ └── greenride_table_schema.json # BigQuery table schema
-│
-├── dashboard/
-│ ├── dashboard_mockup.png # Screenshot of Looker dashboard
-│ └── dashboard_description.md # Dashboard metrics and insights
-│
+├── README.md
 ├── architecture/
-│ └── architecture_diagram.png # Visual of full project flow
+│   └── greenride_architecture_diagram.png
 │
-└── README.md
+├── data_simulation/
+│   └── generate_greenride_data.py
+│
+├── cloud_functions/
+│   └── push_to_gcs.py
+│
+├── dataflow_pipeline/
+│   └── greenride_dataflow_job.py
+│
+├── airflow_dag/
+│   └── greenride_data_ingestion_dag.py
+│
+├── bigquery/
+│   └── schema/
+│       ├── trips_schema.json
+│       └── stations_schema.json
+│
+├── looker_dashboard/
+│   ├── dashboard_screenshot_1.png
+│   ├── dashboard_screenshot_2.png
+│   └── dashboard_explanation.md
+│
+└── docs/
+    ├── greenride_summary.md
+    └── deployment_steps.md
 
 ```
 ---
