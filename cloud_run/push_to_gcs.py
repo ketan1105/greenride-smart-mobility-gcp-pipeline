@@ -1,19 +1,27 @@
-import os
+from flask import Flask, jsonify
 from google.cloud import storage
+import os
 
-def upload_file_to_gcs(event, context):
-    """Triggered from Cloud Scheduler to upload data to GCS raw bucket."""
-    # Set GCS bucket and filename
-    bucket_name = os.environ.get("BUCKET_NAME")
-    local_file_path = os.environ.get("LOCAL_FILE_PATH")
-    destination_blob_name = os.environ.get("DESTINATION_BLOB_NAME")
+app = Flask(__name__)
 
-    # Initialize GCS client
+# Replace with your raw bucket name (dummy or placeholder)
+RAW_BUCKET_NAME = "greenride-raw-bucket"
+
+@app.route("/push", methods=["POST"])
+def push_data_to_gcs():
     client = storage.Client()
-    bucket = client.bucket(bucket_name)
-    blob = bucket.blob(destination_blob_name)
+    bucket = client.get_bucket(RAW_BUCKET_NAME)
 
-    # Upload file
-    blob.upload_from_filename(local_file_path)
-    print(f"✅ Uploaded {local_file_path} to gs://{bucket_name}/{destination_blob_name}")
+    files_to_upload = {
+        "trips.json": "data_simulation/output/trips.json",
+        "stations.json": "data_simulation/output/stations.json"
+    }
 
+    for gcs_filename, local_path in files_to_upload.items():
+        blob = bucket.blob(f"raw/{gcs_filename}")
+        blob.upload_from_filename(local_path)
+
+    return jsonify({"message": "✅ Files pushed to GCS raw bucket"}), 200
+
+if __name__ == "__main__":
+    app.run(debug=True)
